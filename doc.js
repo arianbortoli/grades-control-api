@@ -1,22 +1,41 @@
+export const swaggerDocument = {
   swagger: '2.0',
   info: {
-    description: 'My State-Cities API',
+    title: 'My Grades Control API',
     version: 'beta 1.0.0',
-    title: 'My State-Cities API',
+    description:
+      'My Grades Control. API para controlar notas de alunos em matérias de um curso. Existem endpoints para criação, atualização, exclusão e consulta de notas, aqui chamadas de grades. As grades deverão ser salvas em um arquivo json, chamado “grades.json”.',
   },
   host: 'localhost:3000',
   tags: [
     {
-      name: 'States',
-      description: 'States information',
+      name: 'grades',
+      description: 'grades information',
     },
   ],
   paths: {
-    '/state/top5': {
-      get: {
-        tags: ['States'],
-        summary: 'Get Top 5 states with most cities',
-        description: 'Get Top 5 states with most cities',
+    '/grades': {
+      post: {
+        tags: ['grades'],
+        summary: 'add a new grade',
+        description: 'add a new grade',
+        produces: ['application/json'],
+        responses: {
+          '200': {
+            description: 'successful operation',
+            schema: {
+              type: 'string',
+            },
+          },
+          '400': {
+            description: 'Error occurred',
+          },
+        },
+      },
+      put: {
+        tags: ['grades'],
+        summary: 'update a grade information',
+        description: 'update a grade information',
         produces: ['application/json'],
         responses: {
           '200': {
@@ -31,55 +50,44 @@
         },
       },
     },
-    '/state/bottom5': {
+    '/grades/{id}': {
       get: {
-        tags: ['States'],
-        summary: 'Get 5 states with lowest number of cities',
-        description: 'Get 5 states with lowest number of cities',
-        produces: ['application/json'],
-        responses: {
-          '200': {
-            description: 'successful operation',
-            schema: {
-              type: 'string',
-            },
-          },
-          '400': {
-            description: 'Error occurred',
-          },
-        },
-      },
-    },
-    '/state/bottomCity': {
-      get: {
-        tags: ['States'],
-        summary: 'Get City with lowest letters for each State',
-        description: 'Get City with lowest letters for each State',
-        produces: ['application/json'],
-        responses: {
-          '200': {
-            description: 'successful operation',
-            schema: {
-              type: 'string',
-            },
-          },
-          '400': {
-            description: 'Error occurred',
-          },
-        },
-      },
-    },
-    '/state/bottomCity/{State}': {
-      get: {
-        tags: ['States'],
-        summary: 'Get City with lowest letters for that State',
-        description: 'Get City with lowest letters for that State',
+        tags: ['grades'],
+        summary: 'Get grade by id',
+        description: 'Get grade by id',
         produces: ['application/json'],
         parameters: [
           {
             in: 'path',
-            name: 'State',
-            description: 'State abreviation to request',
+            name: 'id',
+            description: 'grade Id',
+            required: true,
+            type: 'string',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'successful operation',
+            schema: {
+              type: 'string',
+            },
+          },
+          '400': {
+            description: 'Error occurred',
+          },
+        },
+      },
+
+      delete: {
+        tags: ['grades'],
+        summary: 'delete grade by id',
+        description: 'delete grade by id',
+        produces: ['application/json'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            description: 'grade Id',
             required: true,
             type: 'string',
           },
@@ -98,56 +106,24 @@
       },
     },
 
-    '/state/lowestCity': {
+    '/grades/totalGrade/{student}/{subject}': {
       get: {
-        tags: ['States'],
-        summary: 'Get City with lowest letters from all states',
-        description: 'Get City with lowest letters from all State',
-        produces: ['application/json'],
-        responses: {
-          '200': {
-            description: 'successful operation',
-            schema: {
-              type: 'string',
-            },
-          },
-          '400': {
-            description: 'Error occurred',
-          },
-        },
-      },
-    },
-
-    '/state/topCity': {
-      get: {
-        tags: ['States'],
-        summary: 'Get City with most letters for each State',
-        description: 'Get City with most letters for each State',
-        produces: ['application/json'],
-        responses: {
-          '200': {
-            description: 'successful operation',
-            schema: {
-              type: 'string',
-            },
-          },
-          '400': {
-            description: 'Error occurred',
-          },
-        },
-      },
-    },
-    '/state/topCity/{State}': {
-      get: {
-        tags: ['States'],
-        summary: 'Get City with most letters for that State',
-        description: 'Get City with most letters for that State',
+        tags: ['grades'],
+        summary: 'Get total grade by student and subject',
+        description: 'Get total grade by student and subject',
         produces: ['application/json'],
         parameters: [
           {
             in: 'path',
-            name: 'State',
-            description: 'State abreviation to request',
+            name: 'student',
+            description: 'student name',
+            required: true,
+            type: 'string',
+          },
+          {
+            in: 'path',
+            name: 'subject',
+            description: 'subject',
             required: true,
             type: 'string',
           },
@@ -166,12 +142,28 @@
       },
     },
 
-    '/state/highestCity': {
+    '/grades/avggrades/{subject}/{type}': {
       get: {
-        tags: ['States'],
-        summary: 'Get City with most letters from all states',
-        description: 'Get City with most letters from all State',
+        tags: ['grades'],
+        summary: 'Get average grade for subject and type',
+        description: 'Get average grade for subject and type',
         produces: ['application/json'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'subject',
+            description: 'subject',
+            required: true,
+            type: 'string',
+          },
+          {
+            in: 'path',
+            name: 'type',
+            description: 'type',
+            required: true,
+            type: 'string',
+          },
+        ],
         responses: {
           '200': {
             description: 'successful operation',
@@ -186,18 +178,24 @@
       },
     },
 
-    '/state/{State}': {
+    '/grades/top3/{subject}/{type}': {
       get: {
-        tags: ['States'],
-        summary: 'Get number of cities for State',
-        description: 'Get number of cities for requested State',
+        tags: ['grades'],
+        summary: 'Get top 3 grades from subject and type',
+        description: 'Get top 3 grades from subject and type',
         produces: ['application/json'],
-
         parameters: [
           {
             in: 'path',
-            name: 'State',
-            description: 'State abreviation to request',
+            name: 'subject',
+            description: 'subject',
+            required: true,
+            type: 'string',
+          },
+          {
+            in: 'path',
+            name: 'type',
+            description: 'type',
             required: true,
             type: 'string',
           },
@@ -206,7 +204,7 @@
           '200': {
             description: 'successful operation',
             schema: {
-              type: 'number',
+              type: 'string',
             },
           },
           '400': {
@@ -217,31 +215,32 @@
     },
   },
   definitions: {
-    State: {
+    grades: {
       type: 'object',
       properties: {
         id: {
-          type: 'string',
+          type: 'integer',
           example: '23',
         },
-        Sigla: {
+        student: {
           type: 'string',
-          example: 'RS',
+          example: 'Guilherme Assis',
         },
-        Nome: {
+        subject: {
           type: 'string',
-          example: 'Rio Grande do Sul',
+          example: 'Matemática',
         },
-        Cidades: {
-          type: 'array',
-          json: {
-            ID: '4174',
-            Nome: 'Porto Alegre',
-            Estado: '23',
-          },
-          items: {
-            type: 'string',
-          },
+        type: {
+          type: 'string',
+          example: 'Prova final',
+        },
+        value: {
+          type: 'number',
+          example: '10',
+        },
+        timestamp: {
+          type: 'date',
+          example: '2020-05-19T18:21:24.964Z',
         },
       },
     },
